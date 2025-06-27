@@ -1,0 +1,449 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: #333;
+}
+
+.container {
+  width: 100%;
+  max-width: none;
+  margin: 0; 
+  padding: 0;
+  min-height: 100vh;
+  background: white;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.header {
+  background: linear-gradient(135deg, #ff6b6b, #feca57);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="2" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23pattern)"/></svg>');
+  animation: float 20s infinite linear;
+}
+
+@keyframes float {
+  0% { transform: translateX(-50px) translateY(-50px); }
+  100% { transform: translateX(-50px) translateY(-70px); }
+}
+
+.header h1 {
+  font-size: 1.8em;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.header p {
+  font-size: 1em;
+  opacity: 0.9;
+  position: relative;
+  z-index: 1;
+}
+
+.screen {
+  display: none;
+  
+  padding: 20px 30px;
+  min-height: calc(100vh - 140px);
+}
+
+.screen.active {
+  display: block;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+#main-screen {
+  padding: 0 !important;
+}
+
+
+
+.welcome-screen {
+  padding: 0 !important;
+  margin: 0 !important;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+.welcome-overlay {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.welcome-buttons {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;             /* 반드시 있어야 함 */
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  z-index: 100;              /* 다른 요소에 가려지지 않게 */
+}
+
+.welcome-emoji {
+  position: absolute;       
+  top: 200px;                /* 상단에서 30px 여백 */
+  left: 50%;                /* 가운데 정렬 */
+  transform: translateX(-50%); /* 수평 중앙 정렬 */
+  font-size: 4em;
+  animation: bounce 2s infinite;
+  z-index: 10;              /* 다른 요소 위에 보이도록 */
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-15px);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.welcome-image-container {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 0px);
+  background-image: url('https://i.imgur.com/NOWpxXN.jpeg');
+  background-size: cover;
+  background-position: center bottom;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-text {
+  font-size: 1.5em;
+  font-weight: bold; 
+  color: #ffffff;
+  line-height: 1.6;
+  text-align: center;
+
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  padding: 0 20px;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6); /* 텍스트 외곽선 */
+  border-radius: 15px;
+}
+
+.btn {
+  width: 130%;
+  max-width: 320px;
+  padding: 16px;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 500%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.5s, height 0.5s;
+}
+
+.btn:active::before {
+  width: 350px;
+  height: 350px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff6b6b, #feca57);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255,107,107,0.3);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #48cae4, #0077b6);
+  color: white;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(72,202,228,0.3);
+}
+
+.btn-tertiary {
+  background: linear-gradient(135deg, #11998e, #38ef7d);
+  color: white;
+}
+
+.btn-tertiary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(112, 225, 245, 0.3);
+}
+
+.facilities-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.facility-card {
+  background: #f8f9fa;
+  border: 2px solid #e0e0e0;
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.facility-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.facility-card.selected {
+  background: linear-gradient(135deg, #ff6b6b, #feca57);
+  color: white;
+  border-color: #ff6b6b;
+  transform: scale(1.05);
+}
+
+.facility-emoji {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.facility-name {
+  font-weight: 600;
+  font-size: 1em;
+}
+
+.back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 15px;
+  font-size: 1em;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #ff6b6b;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(255,107,107,0.1);
+}
+
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.time-slot {
+  background: #f8f9fa;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.time-slot:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.time-slot.selected {
+  background: linear-gradient(135deg, #ff6b6b, #feca57);
+  color: white;
+  border-color: #ff6b6b;
+  transform: scale(1.02);
+}
+
+.time-slot.unavailable {
+  background: #e9ecef;
+  color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.today-date {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+.reservation-item {
+  background: #f8f9fa;
+  border: 2px solid #e0e0e0;
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.reservation-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.no-reservations {
+  background: #f8f9fa;
+  padding: 40px 20px;
+  border-radius: 15px;
+  text-align: center;
+  color: #666;
+  font-size: 1.1em;
+}
+
+.timetable-container {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.timetable {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  min-width: 600px;
+}
+
+.timetable th,
+.timetable td {
+  padding: 10px 8px;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+  font-size: 0.9em;
+}
+
+.timetable th {
+  background: linear-gradient(135deg, #ff6b6b, #feca57);
+  color: white;
+  font-weight: 600;
+  font-size: 0.85em;
+}
+
+.timetable .reserved {
+  background: linear-gradient(135deg, #ff6b6b, #feca57);
+  color: white;
+  font-weight: 600;
+  font-size: 0.8em;
+}
+
+.timetable .available {
+  background: #f8f9fa;
+  color: #999;
+}
+
+@media (max-width: 480px) {
+  .container {
+    max-width: 100%;
+  }
+
+  .facilities-grid {
+    grid-template-columns: 1fr;
+  }
+}
