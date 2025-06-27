@@ -2,8 +2,36 @@ let currentScreen = 'main-screen';
 let screenHistory = [];
 let selectedFacility = '';
 let selectedTime = '';
-let reservations = [];
-let existingReservations = {};
+
+// ✅ 날짜 자동 초기화 체크
+const todayDateStr = new Date().toLocaleDateString('ko-KR');
+const lastDate = localStorage.getItem('lastUsedDate');
+if (lastDate && lastDate !== todayDateStr) {
+  localStorage.removeItem('reservations');
+  localStorage.removeItem('existingReservations');
+}
+localStorage.setItem('lastUsedDate', todayDateStr);
+
+// 🔐 localStorage에서 기존 예약 데이터 불러오기
+let reservations = JSON.parse(localStorage.getItem('reservations')) || [];
+let existingReservations = JSON.parse(localStorage.getItem('existingReservations')) || {};
+
+function saveToLocalStorage() {
+  localStorage.setItem('reservations', JSON.stringify(reservations));
+  localStorage.setItem('existingReservations', JSON.stringify(existingReservations));
+  localStorage.setItem('lastUsedDate', todayDateStr);
+}
+
+function resetReservations() {
+  if (confirm("모든 예약 데이터를 초기화하시겠습니까?")) {
+    localStorage.removeItem('reservations');
+    localStorage.removeItem('existingReservations');
+    reservations = [];
+    existingReservations = {};
+    alert("초기화가 완료되었습니다.");
+    location.reload();
+  }
+}
 
 function showScreen(screenId) {
   document.getElementById(currentScreen).classList.remove('active');
@@ -12,13 +40,9 @@ function showScreen(screenId) {
   document.getElementById(screenId).classList.add('active');
   updateBackButton();
 
-  if (screenId === 'datetime-screen') {
-    initializeDateTimeScreen();
-  } else if (screenId === 'status-screen') {
-    loadReservationStatus();
-  } else if (screenId === 'all-status-screen') {
-    loadAllStatus();
-  }
+  if (screenId === 'datetime-screen') initializeDateTimeScreen();
+  else if (screenId === 'status-screen') loadReservationStatus();
+  else if (screenId === 'all-status-screen') loadAllStatus();
 }
 
 function goBack() {
@@ -37,9 +61,7 @@ function updateBackButton() {
 }
 
 function selectFacility(element) {
-  document.querySelectorAll('.facility-card').forEach(card => {
-    card.classList.remove('selected');
-  });
+  document.querySelectorAll('.facility-card').forEach(card => card.classList.remove('selected'));
   element.classList.add('selected');
   selectedFacility = element.querySelector('.facility-name').textContent;
 }
@@ -47,10 +69,7 @@ function selectFacility(element) {
 function initializeDateTimeScreen() {
   const today = new Date();
   const todayStr = today.toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    weekday: 'short'
+    year: 'numeric', month: 'long', day: 'numeric', weekday: 'short'
   });
   document.getElementById('today-date').textContent = todayStr;
   updateTimeSlotAvailability();
@@ -63,7 +82,6 @@ function updateTimeSlotAvailability() {
   timeSlots.forEach(slot => {
     const timeData = slot.getAttribute('data-time');
     slot.classList.remove('unavailable', 'selected');
-
     if (facilityReservations.includes(timeData)) {
       slot.classList.add('unavailable');
     }
@@ -104,6 +122,7 @@ function completeReservation() {
   }
   existingReservations[selectedFacility].push(selectedTime);
 
+  saveToLocalStorage();
   updateSuccessScreen(selectedFacility, today, selectedTime);
   showScreen('success-screen');
 }
@@ -140,10 +159,7 @@ function loadReservationStatus() {
 function loadAllStatus() {
   const today = new Date();
   const todayStr = today.toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    weekday: 'short'
+    year: 'numeric', month: 'long', day: 'numeric', weekday: 'short'
   });
   document.getElementById('all-status-date').textContent = todayStr;
 
@@ -165,10 +181,10 @@ function loadAllStatus() {
   timetableBody.innerHTML = html;
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const phoneInput = document.getElementById('user-phone');
   if (phoneInput) {
-    phoneInput.addEventListener('input', function(e) {
+    phoneInput.addEventListener('input', function (e) {
       let value = e.target.value.replace(/[^0-9]/g, '');
       if (value.length >= 3) {
         if (value.length <= 7) {
