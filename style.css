@@ -239,7 +239,7 @@ body {
 }
 
 .btn-reset {
-  background-color: #dc3545;
+ background: linear-gradient(135deg, #11998e, #38ef7d);
   color: white;
   border: none;
   padding: 12px 22px;
@@ -252,7 +252,8 @@ body {
 }
 
 .btn-reset:hover {
-  background-color: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(112, 225, 245, 0.3);
 }
 
 .facilities-grid {
