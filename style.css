@@ -457,11 +457,40 @@ body {
 }
 
 @media (max-width: 480px) {
-  .container {
-    max-width: 100%;
+  .welcome-text {
+    font-size: 1.1em;
+    padding: 0 10px;
+  }
+
+  .btn {
+    width: 90%;
+    font-size: 1em;
   }
 
   .facilities-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* 1열로 */
+  }
+}
+
+/* 세로형 태블릿 (예: 768×1024) */
+@media (max-width: 1024px) {
+  .btn {
+    width: 100%;
+  }
+
+  .screen {
+    padding: 15px;
+  }
+
+  .timetable th, .timetable td {
+    font-size: 0.75em;
+  }
+}
+
+/* 스탠바이미 및 PC (1080x1920 이상) */
+@media (min-width: 1025px) {
+  .container {
+    max-width: 768px;
+    margin: 0 auto;
   }
 }
