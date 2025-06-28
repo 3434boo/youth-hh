@@ -6,23 +6,28 @@
   box-sizing: border-box;
 }
 
-body {
+html, body {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: #f0f0f0;
   font-family: 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-  color: #333;
 }
 
 .container {
   width: 100%;
-  max-width: none;
-  margin: 0; 
-  padding: 0;
+  max-width: 430px;
   min-height: 100vh;
-  background: white;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
-  position: relative;
-  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  overflow-x: hidden;
+  margin: 0 auto;
+}
+
+.btn, .form-input {
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  padding: clamp(10px, 4vw, 16px);
 }
 
 .header {
