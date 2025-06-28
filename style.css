@@ -507,7 +507,7 @@ body {
     top: 42%;
   }
   .welcome-buttons {
-    bottom: 160px;
+    bottom: 260px;
     gap: 16px;
   }
   .welcome-emoji {
@@ -522,7 +522,7 @@ body {
     top: 44%;
   }
   .welcome-buttons {
-    bottom: 100px;
+    bottom: 200px;
     gap: 14px;
   }
 }
@@ -534,7 +534,7 @@ body {
   }
 
   .welcome-buttons {
-    bottom: 160px;
+    bottom: 260px;
     gap: 16px;
   }
 
