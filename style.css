@@ -481,6 +481,7 @@ body {
     bottom: 60px;
     gap: 12px;
   }
+}
 
  @media (min-width: 900px) and (orientation: portrait) {
   .welcome-text {
@@ -503,6 +504,7 @@ body {
   .welcome-buttons {
     bottom: 70px;
   }
+}
 
   @media screen and (min-width: 1600px) and (max-width: 2650px) and (orientation: portrait) {
   .welcome-text {
