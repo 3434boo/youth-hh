@@ -501,7 +501,7 @@ body {
   }
 
   .welcome-buttons {
-    bottom: 58px;
+    bottom: 70px;
   }
 /* -------- WebOS & StanbyME 대응 -------- */
 @media screen and (device-width: 1080px) and (device-height: 1920px) and (orientation: portrait) {
@@ -527,30 +527,6 @@ html, body {
   overflow: hidden;
 }
 
-/* -------- landscape (가로 화면) 대응 -------- */
-@media (orientation: landscape) {
-  .welcome-text {
-    top: 40%;
-    font-size: 1.6rem;
-  }
-
-  .welcome-buttons {
-    bottom: 50px;
-  }
-}
-
-/* -------- tablet 대응 -------- */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .welcome-text {
-    font-size: 2rem;
-    top: 45%;
-  }
-
-  .welcome-buttons {
-    bottom: 40px;
-    gap: 12px;
-  }
-}
 
 /* -------- 스탠바이미 등 900px 이상 portrait -------- */
 @media (min-width: 900px) and (orientation: portrait) {
