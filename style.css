@@ -473,24 +473,25 @@ body {
 
   @media (min-width: 768px) and (max-width: 1024px) {
   .welcome-text {
-    font-size: 2rem;
+    font-size: 4rem;
     top: 45%;
 }
 
   .welcome-buttons {
-    bottom: 40px;
+    bottom: 60px;
     gap: 12px;
   }
 
-    @media (min-width: 900px) and (orientation: portrait) {
+ @media (min-width: 900px) and (orientation: portrait) {
   .welcome-text {
     font-size: 2.2rem;
     top: 44%;
- }
+  }
 
   .welcome-buttons {
     bottom: 48px;
     gap: 14px;
+  }
  }
 
   @media (orientation: landscape) {
