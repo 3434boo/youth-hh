@@ -456,46 +456,10 @@ body {
   color: #999;
 }
 
-@media (max-width: 480px) {
-  .welcome-text {
-    font-size: 1.1em;
-    padding: 0 10px;
-  }
-
-  .btn {
-    width: 90%;
-    font-size: 1em;
-  }
-
-  .facilities-grid {
-    grid-template-columns: 1fr; /* 1열로 */
-  }
-}
-
-@media (max-width: 360px) {
-  .welcome-text {
-    font-size: 1.2em;
-    padding: 0 10px;
-  }
-
-  .btn {
-    width: 90%;
-    font-size: 0.95em;
-    padding: 12px;
-  }
-
-  .form-input {
-    font-size: 0.9em;
-    padding: 12px;
-  }
-
-  .facility-card {
-    padding: 15px;
-  }
-
-  .reservation-item {
-    font-size: 0.9em;
-    padding: 15px;
+@media (min-width: 361px) and (max-width: 480px) {
+  .container {
+    padding: 0 15px;
+    box-shadow: none;
   }
 }
 
@@ -523,16 +487,9 @@ body {
 
 @media (min-width: 481px) and (max-width: 1024px) {
   .container {
-    padding: 0 20px;
-  }
-
-  .btn {
-    width: 80%;
-    font-size: 1em;
-  }
-
-  .form-input {
-    font-size: 1em;
+    max-width: 600px;
+    padding: 0 30px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
   }
 }
 
@@ -552,7 +509,8 @@ body {
 
 @media (min-width: 1025px) {
   .container {
-    max-width: 768px;
+    max-width: 430px;
     margin: 0 auto;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
   }
 }
