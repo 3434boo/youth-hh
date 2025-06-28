@@ -534,7 +534,7 @@ body {
   }
 
   .welcome-buttons {
-    bottom: 4000px;
+    bottom: 400px !important;
     gap: 16px;
   }
 
