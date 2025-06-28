@@ -7,9 +7,11 @@
 }
 
 body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   font-family: 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
   color: #333;
 }
 
@@ -103,6 +105,14 @@ body {
   color: #fff;             /* 텍스트 흰색 */
 }
 
+.welcome-overlay,
+.welcome-image-container,
+.welcome-screen {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
 .welcome-overlay {
   width: 100vw;
   height: 100vh;
@@ -112,22 +122,22 @@ body {
 
 .welcome-buttons {
   position: absolute;
-  bottom: 32px;
+  bottom: 125px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   z-index: 100;
-  width: 100%;
+  width: 900%;
   max-width: 90%;
 }
 
 .welcome-emoji {
   position: absolute;       
-  top: 200px;                /* 상단에서 30px 여백 */
-  left: 50%;                /* 가운데 정렬 */
+  top: 140px;                /* 상단에서 30px 여백 */
+  left: 45%;                /* 가운데 정렬 */
   transform: translateX(-50%); /* 수평 중앙 정렬 */
   font-size: 4em;
   animation: bounce 2s infinite;
@@ -151,23 +161,21 @@ body {
 .welcome-image-container {
   background: url('https://i.imgur.com/NOWpxXN.jpeg') no-repeat center bottom;
   background-size: cover;
-  background-attachment: fixed;     /* 💡 선택사항: 배경 고정 */
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 100vh;
+  background-attachment: fixed;
+  background-position: center center;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .welcome-text {
-  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-size: clamp(1.5rem, 2.5vw, 1.8rem);
   font-weight: bold;
   color: #ffffff;
   line-height: 1.6;
   text-align: center;
   position: absolute;
-  top: 42%;
+  top: 36%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
