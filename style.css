@@ -500,7 +500,7 @@ body {
     top: 44%;
   }
   .welcome-buttons {
-    bottom: 52px;
+    bottom: 100px;
     gap: 14px;
   }
 }
