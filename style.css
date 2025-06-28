@@ -456,61 +456,66 @@ body {
   color: #999;
 }
 
-@media (min-width: 361px) and (max-width: 480px) {
-  .container {
-    padding: 0 15px;
-    box-shadow: none;
-  }
-}
-
+/* 📱 모바일 (iPhone, 갤럭시 S 시리즈) */
 @media (max-width: 480px) {
+  .welcome-text { font-size: 1.2em; padding: 0 10px; }
+  .btn { width: 90%; font-size: 1em; padding: 12px; }
+  .form-input { font-size: 0.9em; padding: 12px; }
+  .facilities-grid, .time-slots { grid-template-columns: 1fr; }
+}
+
+/* 아주 작은 폰 (iPhone SE 등) */
+@media (max-width: 360px) {
+  .btn { font-size: 0.9em; padding: 10px; }
+  .form-input { font-size: 0.85em; }
+}
+
+/* 📱 세로 태블릿 – Tab A8 10.5" (1920×1200)와 유사 */
+@media (min-width: 600px) and (max-width: 834px) {
+  .container { padding: 0 20px; }
+  .btn { width: 100%; font-size: 1.05em; }
+  .form-input { font-size: 1em; }
+  .facilities-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* 갤럭시 Tab S9/Tab S10 세로 (1600×2560 또는 1752×2800) 대응 */
+@media (min-width: 835px) and (max-width: 1200px) and (orientation: portrait) {
+  body { background: #f0f0f0; }
+  .container { width: 768px; margin: 0 auto; box-shadow: 0 0 30px rgba(0,0,0,0.1); }
+  .header h1 { font-size: 2.2em; }
+  .btn { max-width: 360px; }
+}
+
+/* PC 가로형 모니터에서도 세로형처럼 고정 폭 유지 */
+@media (min-width: 1201px) {
+  body {
+    display: flex;
+    justify-content: center;
+    background: #eaeaea;
+    padding: 40px 0;
+  }
   .container {
-    padding: 0 10px;
-  }
-
-  .facilities-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .time-slots {
-    grid-template-columns: 1fr;
-  }
-
-  .header h1 {
-    font-size: 1.4em;
-  }
-
-  .header p {
-    font-size: 0.95em;
+    width: 768px;
+    max-width: 80vh; /* 세로 높이에 맞추기 */
+    height: 100vh;
+    overflow-y: auto;
   }
 }
 
-@media (min-width: 481px) and (max-width: 1024px) {
-  .container {
-    max-width: 600px;
-    padding: 0 30px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-  }
+/* 키오스크/TV(1080×1920) 대응 */
+@media (min-width: 1080px) and (orientation: portrait) and (max-height: 1920px) {
+  .welcome-emoji { top: 150px; font-size: 5em; }
+  .welcome-buttons { gap: 8px; bottom: 40px; }
+  .btn { padding: 18px; font-size: 1.2em; }
+  .facilities-grid { gap: 20px; }
 }
 
-@media (max-width: 1024px) {
-  .btn {
-    width: 100%;
-  }
-
-  .screen {
-    padding: 15px;
-  }
-
-  .timetable th, .timetable td {
-    font-size: 0.75em;
-  }
+/* landscape 방향 전환 시 강제 세로형 유지 (90° 회전 무시) */
+html, body {
+  transform: rotate(0deg);
+  transform-origin: top left;
 }
 
-@media (min-width: 1025px) {
-  .container {
-    max-width: 430px;
-    margin: 0 auto;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-  }
-}
+/* 고해상도 기기 대응: Retina 해상도 보정 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  body { /* 필요 시 고정 비율 유지 스타일 보정 */ }
