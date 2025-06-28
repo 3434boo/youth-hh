@@ -473,86 +473,56 @@ body {
 }
 
 @media (max-width: 360px) {
-  .welcome-text {
-    font-size: 1.2em;
-    padding: 0 10px;
-  }
-
+  /* 아주 작은 화면용: iPhone SE, 일부 안드로이드 폰 */
   .btn {
-    width: 90%;
-    font-size: 0.95em;
-    padding: 12px;
+    font-size: 0.9em;
+    padding: 10px;
   }
-
   .form-input {
-    font-size: 0.9em;
-    padding: 12px;
-  }
-
-  .facility-card {
-    padding: 15px;
-  }
-
-  .reservation-item {
-    font-size: 0.9em;
-    padding: 15px;
+    font-size: 0.85em;
   }
 }
 
 @media (max-width: 480px) {
+  /* 일반 모바일 대응 */
   .container {
     padding: 0 10px;
   }
-
-  .facilities-grid {
+  .facilities-grid, .time-slots {
     grid-template-columns: 1fr;
   }
-
-  .time-slots {
-    grid-template-columns: 1fr;
+  .btn {
+    width: 100%;
+    font-size: 1em;
   }
-
-  .header h1 {
-    font-size: 1.4em;
-  }
-
-  .header p {
-    font-size: 0.95em;
+  .form-input {
+    padding: 14px;
   }
 }
 
 @media (min-width: 481px) and (max-width: 1024px) {
+  /* 태블릿 대응 */
   .container {
     padding: 0 20px;
   }
-
-  .btn {
-    width: 80%;
-    font-size: 1em;
-  }
-
-  .form-input {
-    font-size: 1em;
-  }
-}
-
-@media (max-width: 1024px) {
   .btn {
     width: 100%;
   }
-
   .screen {
     padding: 15px;
   }
-
   .timetable th, .timetable td {
     font-size: 0.75em;
   }
 }
 
 @media (min-width: 1025px) {
-  .container {
-    max-width: 768px;
-    margin: 0 auto;
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    background: #f0f0f0;
+    height: 100vh;
+    overflow: hidden;
   }
 }
