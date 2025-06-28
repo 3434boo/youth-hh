@@ -492,15 +492,6 @@ body {
   .facilities-grid { gap: 20px; }
 }
 
-html, body {
-  transform: rotate(0deg);
-  transform-origin: top left;
-}
-
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  body {}
-}
-
 /* 고해상도 기기 대응: Retina 해상도 보정 */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   body { /* 필요 시 고정 비율 유지 스타일 보정 */ }
