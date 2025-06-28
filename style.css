@@ -122,7 +122,7 @@ body {
 
 .welcome-buttons {
   position: absolute;
-  bottom: 125px;
+  bottom: 300px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
