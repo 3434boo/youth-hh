@@ -470,12 +470,12 @@ body {
 /* Media Queries */
 @media screen and (max-width: 767px) and (orientation: portrait) {
   .welcome-text {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     top: 40%;
   }
 
   .welcome-buttons {
-    bottom: 132px;
+    bottom: 80px;
     gap: 10px;
   }
 
@@ -496,7 +496,7 @@ body {
     top: 45%;
   }
   .welcome-buttons {
-    bottom: 260px;
+    bottom: 60px;
     gap: 12px;
   }
 }
