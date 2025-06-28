@@ -65,9 +65,8 @@ body {
 
 .screen {
   display: none;
-  
-  padding: 20px 30px;
-  min-height: calc(100vh - 140px);
+  padding: 20px;
+  min-height: calc(100vh - 120px);
 }
 
 .screen.active {
@@ -90,24 +89,17 @@ body {
   padding: 0 !important;
 }
 
-
-
 .welcome-screen {
-  padding: 0 !important;
-  margin: 0 !important;
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  padding: 0;
-  margin: 0;
-}
-
-.welcome-overlay {
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
+  padding: 0 20px;
+  color: #fff;
 }
 
 .welcome-buttons {
@@ -134,10 +126,10 @@ body {
 
 @keyframes bounce {
   0%, 100% {
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
   }
   50% {
-    transform: translateX(-50%) translateY(-15px);
+    transform: translateY(-15px);
   }
 }
 
@@ -146,16 +138,12 @@ body {
   to { opacity: 1; }
 }
 
-.welcome-image-container {
+#welcome-image-container, .welcome-overlay {
+  width: 100vw;
+  height: 100vh;
   position: relative;
-  width: 100%;
-  height: calc(100vh - 0px);
-  background-image: url('https://i.imgur.com/NOWpxXN.jpeg');
-  background-size: cover;
-  background-position: center bottom;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin: 0;
+  padding: 0;
 }
 
 .welcome-text {
@@ -456,7 +444,6 @@ body {
   color: #999;
 }
 
-/* 📱 모바일 (iPhone, 갤럭시 S 시리즈) */
 @media (max-width: 480px) {
   .welcome-text { font-size: 1.2em; padding: 0 10px; }
   .btn { width: 90%; font-size: 1em; padding: 12px; }
@@ -464,13 +451,11 @@ body {
   .facilities-grid, .time-slots { grid-template-columns: 1fr; }
 }
 
-/* 아주 작은 폰 (iPhone SE 등) */
 @media (max-width: 360px) {
   .btn { font-size: 0.9em; padding: 10px; }
   .form-input { font-size: 0.85em; }
 }
 
-/* 📱 세로 태블릿 – Tab A8 10.5" (1920×1200)와 유사 */
 @media (min-width: 600px) and (max-width: 834px) {
   .container { padding: 0 20px; }
   .btn { width: 100%; font-size: 1.05em; }
@@ -478,7 +463,6 @@ body {
   .facilities-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* 갤럭시 Tab S9/Tab S10 세로 (1600×2560 또는 1752×2800) 대응 */
 @media (min-width: 835px) and (max-width: 1200px) and (orientation: portrait) {
   body { background: #f0f0f0; }
   .container { width: 768px; margin: 0 auto; box-shadow: 0 0 30px rgba(0,0,0,0.1); }
@@ -486,7 +470,6 @@ body {
   .btn { max-width: 360px; }
 }
 
-/* PC 가로형 모니터에서도 세로형처럼 고정 폭 유지 */
 @media (min-width: 1201px) {
   body {
     display: flex;
@@ -496,13 +479,12 @@ body {
   }
   .container {
     width: 768px;
-    max-width: 80vh; /* 세로 높이에 맞추기 */
+    max-width: 80vh;
     height: 100vh;
     overflow-y: auto;
   }
 }
 
-/* 키오스크/TV(1080×1920) 대응 */
 @media (min-width: 1080px) and (orientation: portrait) and (max-height: 1920px) {
   .welcome-emoji { top: 150px; font-size: 5em; }
   .welcome-buttons { gap: 8px; bottom: 40px; }
@@ -510,10 +492,13 @@ body {
   .facilities-grid { gap: 20px; }
 }
 
-/* landscape 방향 전환 시 강제 세로형 유지 (90° 회전 무시) */
 html, body {
   transform: rotate(0deg);
   transform-origin: top left;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  body {}
 }
 
 /* 고해상도 기기 대응: Retina 해상도 보정 */
