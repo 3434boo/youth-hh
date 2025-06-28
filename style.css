@@ -476,7 +476,7 @@ body {
   }
 
   .welcome-buttons {
-    bottom: 80px;
+    bottom: 120px;
     gap: 10px;
   }
 
@@ -497,7 +497,7 @@ body {
     top: 45%;
   }
   .welcome-buttons {
-    bottom: 60px;
+    bottom: 120px;
     gap: 12px;
   }
 }
