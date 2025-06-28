@@ -501,7 +501,7 @@ body {
   }
 
   .welcome-buttons {
-    bottom: 28px;
+    bottom: 38px;
   }
 /* -------- WebOS & StanbyME 대응 -------- */
 @media screen and (device-width: 1080px) and (device-height: 1920px) and (orientation: portrait) {
