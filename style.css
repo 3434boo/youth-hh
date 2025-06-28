@@ -444,54 +444,5 @@ body {
   color: #999;
 }
 
-@media (max-width: 480px) {
-  .welcome-text { font-size: 1.2em; padding: 0 10px; }
-  .btn { width: 90%; font-size: 1em; padding: 12px; }
-  .form-input { font-size: 0.9em; padding: 12px; }
-  .facilities-grid, .time-slots { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 360px) {
-  .btn { font-size: 0.9em; padding: 10px; }
-  .form-input { font-size: 0.85em; }
-}
-
-@media (min-width: 600px) and (max-width: 834px) {
-  .container { padding: 0 20px; }
-  .btn { width: 100%; font-size: 1.05em; }
-  .form-input { font-size: 1em; }
-  .facilities-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (min-width: 835px) and (max-width: 1200px) and (orientation: portrait) {
-  body { background: #f0f0f0; }
-  .container { width: 768px; margin: 0 auto; box-shadow: 0 0 30px rgba(0,0,0,0.1); }
-  .header h1 { font-size: 2.2em; }
-  .btn { max-width: 360px; }
-}
-
-@media (min-width: 1201px) {
-  body {
-    display: flex;
-    justify-content: center;
-    background: #eaeaea;
-    padding: 40px 0;
-  }
-  .container {
-    width: 768px;
-    max-width: 80vh;
-    height: 100vh;
-    overflow-y: auto;
-  }
-}
-
-@media (min-width: 1080px) and (orientation: portrait) and (max-height: 1920px) {
-  .welcome-emoji { top: 150px; font-size: 5em; }
-  .welcome-buttons { gap: 8px; bottom: 40px; }
-  .btn { padding: 18px; font-size: 1.2em; }
-  .facilities-grid { gap: 20px; }
-}
-
-/* 고해상도 기기 대응: Retina 해상도 보정 */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   body { /* 필요 시 고정 비율 유지 스타일 보정 */ }
