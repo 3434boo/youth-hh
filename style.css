@@ -505,6 +505,23 @@ body {
   }
 }
 
+@media screen and (min-width: 1600px) and (max-width: 2650px) and (orientation: portrait) {
+  .welcome-text {
+    font-size: 2.4rem;
+    top: 42%;
+  }
+
+  .welcome-buttons {
+    bottom: 60px;
+    gap: 16px;
+  }
+
+  .welcome-emoji {
+    top: 160px;
+    font-size: 5em;
+  }
+}
+
 @media screen and (orientation: landscape) {
   .welcome-text {
     top: 40%;
