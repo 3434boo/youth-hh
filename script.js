@@ -33,13 +33,12 @@ function resetReservations() {
   }
 }
 
-// 새로운 함수: confirm 없이 바로 초기화 (관리자용)
 function resetReservationsDirectly() {
   // 데이터 초기화
   localStorage.removeItem('reservations');
   reservations = [];
   
-  alert("✅ 모든 예약이 초기화되었습니다.");
+  const removed = await resetFirebaseToday();
   
   // 현재 화면 즉시 새로고침
   if (currentScreen === 'status-screen') {
