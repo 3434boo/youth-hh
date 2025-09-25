@@ -292,7 +292,7 @@ function updateTimeSlotAvailability() {
       // 현재 선택된 시설의 모든 방 번호 확인
       let isTimeSlotUnavailable = false;
       
-      if (selectedFacility === '댄스\n연습실' || selectedFacility === '강의실') {
+      if (selectedFacility === '댄스\n연습실' || selectedFacility === '스포마루') {
         // 번호가 없는 시설: 시설 + 시간만 확인
         const isReserved = firebaseReservations.some(r => 
           r.facility === selectedFacility && 
@@ -356,9 +356,9 @@ function completeReservation() {
 
   console.log('예약 정보:', { userName, userBirth, userPhone, selectedFacility, selectedFacilityNumber, selectedTime });
 
-  // 댄스연습실과 강의실은 번호가 없으므로 검증 조건 수정
+  // 댄스연습실과 스포마루은 번호가 없으므로 검증 조건 수정
   const hasRequiredInfo = userName && userBirth && userPhone && selectedFacility && selectedTime;
-  const hasFacilityNumber = selectedFacilityNumber || (selectedFacility === '댄스연습실' || selectedFacility === '댄스\n연습실' || selectedFacility === '강의실');
+  const hasFacilityNumber = selectedFacilityNumber || (selectedFacility === '댄스연습실' || selectedFacility === '댄스\n연습실' || selectedFacility === '스포마루');
   console.log('검증 결과:', { hasRequiredInfo, hasFacilityNumber });
   
   if (!hasRequiredInfo || !hasFacilityNumber) {
@@ -492,7 +492,7 @@ function loadAllStatus() {
       { name: '노래방', numbers: ['1번', '2번'] },
       { name: '보드\n게임', numbers: ['1번', '2번'] },
       { name: '댄스\n연습실', numbers: [] },
-      { name: '강의실', numbers: [] }
+      { name: '스포마루', numbers: [] }
     ];
 
   // 선택된 시설이 있으면 해당 시설만 필터링
@@ -544,7 +544,7 @@ function loadAllStatus() {
             html += `<td></td>`;
           }
         } else {
-          // 번호가 없는 시설 (댄스연습실, 강의실)
+          // 번호가 없는 시설 (댄스연습실, 스포마루)
           const isReserved = firebaseReservations.some(r => 
             r.facility === facility.name && 
             r.date === today && 
@@ -835,7 +835,7 @@ function downloadAllStatusAsHTML() {
   });
 
   const timeSlots = ['09:00-10:00','10:00-11:00','11:00-12:00','13:00-14:00','14:00-15:00','15:00-16:00','16:00-17:00','17:00-18:00','18:00-19:00','19:00-20:00'];
-  const facilities = ['닌텐도','플레이스테이션','노래방','보드게임','댄스연습실','강의실'];
+  const facilities = ['닌텐도','플레이스테이션','노래방','보드게임','댄스연습실','스포마루'];
 
   let htmlContent = `
 <!DOCTYPE html>
@@ -868,7 +868,7 @@ function downloadAllStatusAsHTML() {
                 <th>노래방</th>
                 <th>보드게임</th>
                 <th>댄스연습실</th>
-                <th>강의실</th>
+                <th>스포마루</th>
             </tr>
         </thead>
         <tbody>
@@ -1163,7 +1163,7 @@ function proceedAfterDateTime() {
   }
   
   // 댄스연습실과 강의실은 번호가 없으므로 바로 예약 완료
-  if (selectedFacility === '댄스\n연습실' || selectedFacility === '강의실') {
+  if (selectedFacility === '댄스\n연습실' || selectedFacility === '스포마루') {
     selectedFacilityNumber = ''; // 번호 없음
     completeReservationFirebase();
   } else {
