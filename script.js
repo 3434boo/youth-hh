@@ -125,12 +125,8 @@ function selectFacility(element) {
   };
   selectedFacility = facilityNameMap[name] || name;
   
-  if (selectedFacility === '댄스\n연습실' || selectedFacility === '강의실') {
-    selectedFacilityNumber = ''; // 번호 없음
-    showScreen('datetime-screen'); // 바로 날짜/시간 선택 화면으로 이동
-  } else {
-    showScreen('facility-number-screen'); // 기존대로 번호 선택 화면으로 이동
-  }
+  // 모든 시설에서 날짜/시간 선택 화면으로 이동
+  showScreen('datetime-screen');
 }
 
 // 시설별 번호를 동적으로 생성
@@ -150,16 +146,71 @@ function initializeFacilityNumberScreen() {
     numbers = ['1번', '2번'];
   }
 
+// Firebase에서 오늘 예약 데이터 가져와서 예약된 번호 확인
+  const today = new Date().toISOString().split("T")[0];
+  const dbRef = firebase.database().ref("reservations");
+  
+  dbRef.once("value").then(snapshot => {
+    const firebaseReservations = [];
+    snapshot.forEach(child => {
+      const reservation = child.val();
+      if (reservation.date === today && 
+          reservation.facility === selectedFacility && 
+          reservation.time === selectedTime) {
+        firebaseReservations.push(reservation);
+      }
+    });
+
+    // 예약된 번호 목록
+    const reservedNumbers = firebaseReservations.map(r => r.room || r.facilityNumber);
+  
   numbers.forEach(num => {
-    const numberCard = document.createElement('div');
-    numberCard.classList.add('number-card');
-    if (selectedFacility === '닌텐도' && num === '9번') {
-      numberCard.innerHTML = '<div>9번</div><div style="font-size:0.9em; color:#ff8c00; margin-top:2px;">배려석</div>';
-    } else {
-      numberCard.textContent = num;
-    }
-    numberCard.setAttribute('onclick', 'selectFacilityNumber(this)');
-    numberGrid.appendChild(numberCard);
+      const numberCard = document.createElement('div');
+      numberCard.classList.add('number-card');
+      
+      // 이미 예약된 번호인지 확인
+      const isReserved = reservedNumbers.includes(num);
+      if (isReserved) {
+        numberCard.classList.add('unavailable');
+        // 기존 내용 완전히 제거
+        numberCard.textContent = '';
+        numberCard.innerHTML = '';
+        
+        // 직접 스타일 적용
+        numberCard.style.background = '#e9ecef';
+        numberCard.style.color = '#6c757d';
+        numberCard.style.cursor = 'not-allowed';
+        numberCard.style.opacity = '0.6';
+        numberCard.style.border = '2px solid #dee2e6';
+        numberCard.style.position = 'relative';
+        
+        // 새로운 내용 추가
+        if (selectedFacility === '닌텐도' && num === '9번') {
+          numberCard.innerHTML = `
+            <div>9번</div>
+            <div style="font-size:0.9em; color:#ff8c00; margin-top:2px;">배려석</div>
+            <div style="color:#6c757d; font-size:0.7em; margin-top:2px; font-weight:normal;">예약불가</div>
+          `;
+        } else {
+          numberCard.innerHTML = `
+            <div>${num}</div>
+            <div style="color:#6c757d; font-size:0.7em; margin-top:2px; font-weight:normal;">예약불가</div>
+          `;
+        }
+      } else {
+        // 예약되지 않은 번호
+        if (selectedFacility === '닌텐도' && num === '9번') {
+          numberCard.innerHTML = '<div>9번</div><div style="font-size:0.9em; color:#ff8c00; margin-top:2px;">배려석</div>';
+        } else {
+          numberCard.textContent = num;
+        }
+        numberCard.setAttribute('onclick', 'selectFacilityNumber(this)');
+      }
+      
+      numberGrid.appendChild(numberCard);
+    });
+  }).catch(error => {
+    console.error('Firebase 데이터 로드 실패:', error);
   });
 }
 
@@ -220,24 +271,75 @@ function initializeDateTimeScreen() {
 
 function updateTimeSlotAvailability() {
   const timeSlots = document.querySelectorAll('.time-slot');
-  const today = new Date().toLocaleDateString('ko-KR');
+  const today = new Date().toISOString().split("T")[0];
+
+  // Firebase에서 오늘 예약 데이터 가져오기
+  const dbRef = firebase.database().ref("reservations");
+  
+  dbRef.once("value").then(snapshot => {
+    const firebaseReservations = [];
+    snapshot.forEach(child => {
+      const reservation = child.val();
+      if (reservation.date === today) {
+        firebaseReservations.push(reservation);
+      }
+    });
 
   timeSlots.forEach(slot => {
-    const timeData = slot.getAttribute('data-time');
-    slot.classList.remove('unavailable', 'selected');
-    
-    // 현재 선택된 시설과 번호에 대한 예약이 있는지 확인
-    const isReserved = reservations.some(r => 
-      r.facility === selectedFacility && 
-      r.facilityNumber === selectedFacilityNumber && 
-      r.date === today && 
-      r.time === timeData
-    );
-    
-    if (isReserved) {
-      slot.classList.add('unavailable');
-    }
+      const timeData = slot.getAttribute('data-time');
+      slot.classList.remove('unavailable', 'selected');
+      
+      // 현재 선택된 시설의 모든 방 번호 확인
+      let isTimeSlotUnavailable = false;
+      
+      if (selectedFacility === '댄스\n연습실' || selectedFacility === '강의실') {
+        // 번호가 없는 시설: 시설 + 시간만 확인
+        const isReserved = firebaseReservations.some(r => 
+          r.facility === selectedFacility && 
+          r.date === today && 
+          r.time === timeData
+        );
+        if (isReserved) {
+          isTimeSlotUnavailable = true;
+        }
+      } else {
+        // 번호가 있는 시설: 모든 방 번호가 예약되었는지 확인
+        const facilityNumbers = getFacilityNumbers(selectedFacility);
+        const allNumbersReserved = facilityNumbers.every(num => {
+          return firebaseReservations.some(r => 
+            r.facility === selectedFacility && 
+            (r.room === num || r.facilityNumber === num) && 
+            r.date === today && 
+            r.time === timeData
+          );
+        });
+        
+        if (allNumbersReserved) {
+          isTimeSlotUnavailable = true;
+        }
+      }
+      
+      if (isTimeSlotUnavailable) {
+        slot.classList.add('unavailable');
+      }
+    });
+  }).catch(error => {
+    console.error('Firebase 데이터 로드 실패:', error);
   });
+}
+
+// 시설별 방 번호를 반환하는 헬퍼 함수
+function getFacilityNumbers(facility) {
+  if (facility === '닌텐도') {
+    return ['1번', '2번', '3번', '4번', '5번', '6번', '7번', '8번', '9번'];
+  } else if (facility === '플레이\n스테이션') {
+    return ['1번', '2번'];
+  } else if (facility === '노래방') {
+    return ['1번', '2번'];
+  } else if (facility === '보드\n게임') {
+    return ['1번', '2번'];
+  }
+  return [];
 }
 
 function selectTimeSlot(element) {
@@ -314,116 +416,157 @@ function loadReservationStatus() {
   const reservationList = document.getElementById('reservation-list');
   
   // 강제로 HTML 초기화
-  reservationList.innerHTML = '';
+  reservationList.innerHTML = '<div style="text-align:center; padding:20px;">로딩 중...</div>';
   
-  if (reservations.length === 0) {
-    reservationList.innerHTML = `<div class="no-reservations">📝 아직 예약된 시설이 없습니다.<br>새로운 예약을 만들어보세요!</div>`;
-  } else {
-    let html = '';
-    reservations.forEach(r => {
-      html += `<div class="reservation-item">
-        <h3>🏢 ${r.facility} ${r.facilityNumber}</h3>
-        <p><strong>👤 예약자:</strong> ${r.name}</p>
-        <p><strong>📅 날짜:</strong> ${r.date}</p>
-        <p><strong>⏰ 시간:</strong> ${r.time}</p>
-        <p><strong>📞 연락처:</strong> ${r.phone}</p>
-      </div>`;
+  // Firebase에서 오늘 예약 데이터 가져오기
+  const today = new Date().toISOString().split("T")[0];
+  const dbRef = firebase.database().ref("reservations");
+  
+  dbRef.once("value").then(snapshot => {
+    const firebaseReservations = [];
+    snapshot.forEach(child => {
+      const reservation = child.val();
+      console.log('개별 현황 Firebase 데이터:', reservation); // 디버깅용
+      if (reservation.date === today) {
+        firebaseReservations.push(reservation);
+      }
     });
-    reservationList.innerHTML = html;
-  }
+    
+    console.log('오늘 개별 현황 Firebase 예약:', firebaseReservations); // 디버깅용
+    
+    if (firebaseReservations.length === 0) {
+      reservationList.innerHTML = `<div class="no-reservations">📝 아직 예약된 시설이 없습니다.<br>새로운 예약을 만들어보세요!</div>`;
+    } else {
+      let html = '';
+      firebaseReservations.forEach(r => {
+        // Firebase와 로컬스토리지 필드명 모두 확인
+        const roomNumber = r.room || r.facilityNumber || '';
+        html += `<div class="reservation-item">
+          <h3>🏢 ${r.facility} ${roomNumber}</h3>
+          <p><strong>👤 예약자:</strong> ${r.name}</p>
+          <p><strong>📅 날짜:</strong> ${r.date}</p>
+          <p><strong>⏰ 시간:</strong> ${r.time}</p>
+          <p><strong>📞 연락처:</strong> ${r.phone}</p>
+        </div>`;
+      });
+      reservationList.innerHTML = html;
+    }
+  }).catch(error => {
+    console.error('Firebase 데이터 로드 실패:', error);
+    reservationList.innerHTML = '<div style="text-align:center; padding:20px; color:red;">데이터 로드 실패</div>';
+  });
 }
 
 function loadAllStatus() {
   const statusGrid = document.querySelector('#status-timetable-section .status-grid');
-  statusGrid.innerHTML = '';
+  statusGrid.innerHTML = '<div style="text-align:center; padding:20px;">로딩 중...</div>';
+
+  // Firebase에서 오늘 예약 데이터 가져오기
+  const today = new Date().toISOString().split("T")[0];
+  const dbRef = firebase.database().ref("reservations");
+  
+  dbRef.once("value").then(snapshot => {
+    const firebaseReservations = [];
+    snapshot.forEach(child => {
+      const reservation = child.val();
+      console.log('Firebase 예약 데이터:', reservation); // 디버깅용
+      if (reservation.date === today) {
+        firebaseReservations.push(reservation);
+      }
+    });
 
   // 오늘 날짜 가져오기
-  const today = new Date().toLocaleDateString('ko-KR');
-  
-  // 시간 슬롯 정의 (13:00~18:00)
-  const timeSlots = [
-  "13:00~13:30", "13:30~14:00", "14:00~14:30", "14:30~15:00",
-  "15:00~15:30", "15:30~16:00", "16:00~16:30", "16:30~17:00",
-  "17:00~17:30", "17:30~18:00"
-  ];
+    const todayFormatted = new Date().toLocaleDateString('ko-KR');
+    
+    // 시간 슬롯 정의 (09:00~20:00)
+    const timeSlots = [
+      '09:00~10:00', '10:00~11:00', '11:00~12:00', 
+      '13:00~14:00', '14:00~15:00', '15:00~16:00', 
+      '16:00~17:00', '17:00~18:00', '18:00~19:00', '19:00~20:00'
+    ];
 
   // 모든 시설 정의
-  const allFacilities = [
-    { name: '닌텐도', numbers: ['1번', '2번', '3번', '4번', '5번', '6번', '7번', '8번', '9번'] },
-    { name: '플레이\n스테이션', numbers: ['1번', '2번'] },
-    { name: '노래방', numbers: ['1번', '2번'] },
-    { name: '보드\n게임', numbers: ['1번', '2번'] },
-    { name: '댄스\n연습실', numbers: [] },
-    { name: '강의실', numbers: [] }
-  ];
+    const allFacilities = [
+      { name: '닌텐도', numbers: ['1번', '2번', '3번', '4번', '5번', '6번', '7번', '8번', '9번'] },
+      { name: '플레이\n스테이션', numbers: ['1번', '2번'] },
+      { name: '노래방', numbers: ['1번', '2번'] },
+      { name: '보드\n게임', numbers: ['1번', '2번'] },
+      { name: '댄스\n연습실', numbers: [] },
+      { name: '강의실', numbers: [] }
+    ];
 
   // 선택된 시설이 있으면 해당 시설만 필터링
-  const facilitiesToShow = selectedStatusFacility 
-    ? allFacilities.filter(f => f.name === selectedStatusFacility)
-    : allFacilities;
+    const facilitiesToShow = selectedStatusFacility 
+      ? allFacilities.filter(f => f.name === selectedStatusFacility)
+      : allFacilities;
 
   // 타임테이블 생성
-  let html = `<div class="status-table-container">`;
-  html += `<table class="status-table">`;
-  
-  // 헤더 생성
-  html += `<thead><tr><th>시간</th>`;
-  facilitiesToShow.forEach(facility => {
-    html += `<th>${facility.name}</th>`;
-  });
-  html += `</tr></thead>`;
-  
-  // 본문 생성
-  html += `<tbody>`;
-  timeSlots.forEach(timeSlot => {
-    html += `<tr><td>${timeSlot}</td>`;
+    let html = `<div class="status-table-container">`;
+    html += `<table class="status-table">`;
     
+    // 헤더 생성
+    html += `<thead><tr><th>시간</th>`;
     facilitiesToShow.forEach(facility => {
-      if (facility.numbers.length > 0) {
-        // 번호가 있는 시설 (닌텐도, 플레이스테이션, 노래방, 보드게임)
-        const reservedNumbers = [];
-        facility.numbers.forEach(num => {
-          const isReserved = reservations.some(r => 
+      html += `<th>${facility.name}</th>`;
+    });
+    html += `</tr></thead>`;
+    
+    // 본문 생성
+    html += `<tbody>`;
+    timeSlots.forEach(timeSlot => {
+      html += `<tr><td>${timeSlot}</td>`;
+      
+      facilitiesToShow.forEach(facility => {
+        if (facility.numbers.length > 0) {
+          // 번호가 있는 시설 (닌텐도, 플레이스테이션, 노래방, 보드게임)
+          const reservedNumbers = [];
+          facility.numbers.forEach(num => {
+            // Firebase와 로컬스토리지 필드명 모두 확인
+            const isReserved = firebaseReservations.some(r => 
+              r.facility === facility.name && 
+              (r.room === num || r.facilityNumber === num) && // 둘 다 확인
+              r.date === today && 
+              r.time === timeSlot
+            );
+            if (isReserved) {
+              // 번호만 추출 (예: "1번" -> "1")
+              const numberOnly = num.replace('번', '');
+              reservedNumbers.push(numberOnly);
+            }
+          });
+          
+          if (reservedNumbers.length > 0) {
+            const numberElements = reservedNumbers.map(num => 
+              `<span class="reserved-number">${num}</span>`
+            ).join('');
+            html += `<td class="reserved">${numberElements}</td>`;
+          } else {
+            html += `<td></td>`;
+          }
+        } else {
+          // 번호가 없는 시설 (댄스연습실, 강의실)
+          const isReserved = firebaseReservations.some(r => 
             r.facility === facility.name && 
-            r.facilityNumber === num && 
             r.date === today && 
             r.time === timeSlot
           );
+          
           if (isReserved) {
-            // 번호만 추출 (예: "1번" -> "1")
-            const numberOnly = num.replace('번', '');
-            reservedNumbers.push(numberOnly);
+            html += `<td class="reserved"><span class="reserved-number">예약</span></td>`;
+          } else {
+            html += `<td></td>`;
           }
-        });
-        
-        if (reservedNumbers.length > 0) {
-          const numberElements = reservedNumbers.map(num => 
-            `<span class="reserved-number">${num}</span>`
-          ).join('');
-          html += `<td class="reserved">${numberElements}</td>`;
-        } else {
-          html += `<td></td>`;
         }
-      } else {
-        // 번호가 없는 시설 (댄스연습실, 강의실)
-        const isReserved = reservations.some(r => 
-          r.facility === facility.name && 
-          r.date === today && 
-          r.time === timeSlot
-        );
-        
-        if (isReserved) {
-          html += `<td class="reserved"><span class="reserved-number">예약</span></td>`;
-        } else {
-          html += `<td></td>`;
-        }
-      }
+      });
+      html += `</tr>`;
     });
-    html += `</tr>`;
-  });
-  html += `</tbody></table></div>`;
+    html += `</tbody></table></div>`;
 
-  statusGrid.innerHTML = html;
+    statusGrid.innerHTML = html;
+  }).catch(error => {
+    console.error('Firebase 데이터 로드 실패:', error);
+    statusGrid.innerHTML = '<div style="text-align:center; padding:20px; color:red;">데이터 로드 실패</div>';
+  });
 }
 
 function goToMainAndClear() {
@@ -795,6 +938,11 @@ function setupDownloadModalEvents() {
 }
 
 function selectFacilityNumber(element) {
+  // 예약된 번호는 선택할 수 없음
+  if (element.classList.contains('unavailable')) {
+    return;
+  }
+  
   document.querySelectorAll('.number-card').forEach(card => card.classList.remove('selected'));
   element.classList.add('selected');
   selectedFacilityNumber = element.textContent;
@@ -949,3 +1097,89 @@ function goToFacilityScreen() {
 function goBackToUserInfo() {
   showScreen('user-info-screen');
 }
+
+// === Firebase 연동 예약 함수 (app.js에서 통합) ===
+function completeReservationFirebase() {
+  const name = document.getElementById("user-name").value;
+  const birth = document.getElementById("user-birth").value;
+  const phone = document.getElementById("user-phone").value;
+  const facility = selectedFacility;
+  const room = selectedFacilityNumber; // script.js에서는 selectedFacilityNumber 사용
+  const time = selectedTime;
+  const today = new Date().toISOString().split("T")[0];
+
+  const newReservation = {
+    name,
+    birth,
+    phone,
+    facility,
+    room,
+    time,
+    date: today
+  };
+
+  const dbRef = firebase.database().ref("reservations");
+  const newKey = dbRef.push().key;
+
+  dbRef.child(newKey).set(newReservation).then(() => {
+    showScreen('success-screen'); // 예약 완료 화면으로 이동
+  });
+}
+
+// === Firebase 연동 예약 검색 함수 (app.js에서 통합) ===
+function searchReservationsFirebase() {
+  const searchName = document.getElementById("search-name").value;
+  const searchBirth = document.getElementById("search-birth").value;
+  const searchPhone = document.getElementById("search-phone").value;
+
+  const dbRef = firebase.database().ref("reservations");
+  dbRef.once("value").then(snapshot => {
+    const results = [];
+    snapshot.forEach(child => {
+      const r = child.val();
+      if (r.name === searchName && r.birth === searchBirth && r.phone === searchPhone) {
+        results.push(r);
+      }
+    });
+
+    const resultContainer = document.getElementById("reservation-list");
+    resultContainer.innerHTML = results.length === 0
+      ? '<div class="no-reservations">예약 내역이 없습니다.</div>'
+      : results.map(r =>
+          `<div class="reservation-item">
+             <strong>${r.date}</strong><br>
+             ${r.facility} ${r.room || ''}<br>
+             ${r.time}
+           </div>`).join('');
+    document.getElementById("search-results").style.display = "block";
+  });
+}
+
+function proceedAfterDateTime() {
+  // 시간이 선택되었는지 확인
+  if (!selectedTime) {
+    alert('시간을 선택해주세요.');
+    return;
+  }
+  
+  // 댄스연습실과 강의실은 번호가 없으므로 바로 예약 완료
+  if (selectedFacility === '댄스\n연습실' || selectedFacility === '강의실') {
+    selectedFacilityNumber = ''; // 번호 없음
+    completeReservationFirebase();
+  } else {
+    // 번호가 있는 시설은 번호 선택 화면으로 이동
+    showScreen('facility-number-screen');
+  }
+}
+
+function proceedAfterFacilityNumber() {
+  // 번호가 선택되었는지 확인
+  if (!selectedFacilityNumber) {
+    alert('이용 공간을 선택해주세요.');
+    return;
+  }
+  
+  // 예약 완료
+  completeReservationFirebase();
+}
+
