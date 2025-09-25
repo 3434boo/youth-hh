@@ -1,3 +1,12 @@
+// ✅ 안전하게 읽기
+function getReservations() {
+  try {
+    return JSON.parse(localStorage.getItem('reservations') || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
 // 화면 상태 관리
 let currentScreen = 'main-screen';
 let screenHistory = [];
@@ -35,24 +44,28 @@ function resetReservations() {
 
 // 새로운 함수: confirm 없이 바로 초기화 (관리자용)
 function resetReservationsDirectly() {
-  // 데이터 초기화
-  localStorage.removeItem('reservations');
+  localStorage.setItem('reservations', '[]'); // ✅ 명시적 초기화
   reservations = [];
-  
+
+  // (선택) 선택 상태도 초기화
+  selectedFacility = null;
+  selectedFacilityNumber = null;
+  selectedTime = null;
+  selectedStatusFacility = null;
+
   alert("✅ 모든 예약이 초기화되었습니다.");
-  
-  // 현재 화면 즉시 새로고침
-  if (currentScreen === 'status-screen') {
+
+  // ✅ 즉시 화면 갱신
+  if (currentScreen === 'status-screen' && typeof loadReservationStatus === 'function') {
     loadReservationStatus();
-  } else if (currentScreen === 'all-status-screen') {
+  } else if (currentScreen === 'all-status-screen' && typeof loadAllStatus === 'function') {
     loadAllStatus();
   }
-  
-  // 추가: 강제로 화면 새로고침을 한번 더 시도
+  // 필요 시 한 번 더 보정 호출
   setTimeout(() => {
-    if (currentScreen === 'status-screen') {
+    if (currentScreen === 'status-screen' && typeof loadReservationStatus === 'function') {
       loadReservationStatus();
-    } else if (currentScreen === 'all-status-screen') {
+    } else if (currentScreen === 'all-status-screen' && typeof loadAllStatus === 'function') {
       loadAllStatus();
     }
   }, 100);
