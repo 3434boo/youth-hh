@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Untitled</title>
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./style.css?v=3">
   
   <link rel="manifest" href="manifest.json">
 
@@ -39,10 +39,11 @@
   </div>     
 
   <!-- 사용자 정보 입력 화면 -->
-  <div id="user-info-screen" class="screen" style="margin-top: 80px;">
-   <h2 style="margin: 50px 0 40px; text-align:center; color:#333; font-size: 2em; display: flex; align-items: center; justify-content: center; gap: 4px;">
-    <img src="https://i.imgur.com/Ui18LaO.png" alt="User Icon" style="width: 100px; height: 70px;">
- 예약자 정보
+  <div id="user-info-screen" class="screen">
+    <h2 style="margin: 70px 0 60px; text-align:center; color:#333; font-size: 2em;">
+     <img src="https://i.imgur.com/Ui18LaO.png" alt="User Icon"
+       style="width: 120px; height: 80px; vertical-align: middle; margin-right: 4px;">
+  예약자 정보
 </h2>
     <div class="form-group">
       <label for="user-name">이름</label>
@@ -56,26 +57,25 @@
       <label for="user-phone">전화번호</label>
       <input type="tel" id="user-phone" class="form-input" placeholder="010-0000-0000">
     </div>
-    <div style="text-align: center; margin-top: 80px;">
+    <div style="text-align: center; margin-top: 40px;">
     <button class="btn btn-primary" onclick="validateUserInfo()">다음</button>
   </div>
 </div>
 
   <!-- 정보 확인 화면 -->
-  <div id="user-info-confirm-screen" class="screen" style="margin-top: 80px;">
+  <div id="user-info-confirm-screen" class="screen">
     <h2 style="text-align:center; margin:40px 0 30px;">입력하신 정보가 맞습니까?</h2>
     <div id="confirm-info-box" style="background:#f8f9fa; padding:25px; border-radius:15px; margin-bottom:30px; text-align:left; max-width:350px; margin-left:auto; margin-right:auto;">
       <!-- JS로 정보 표시 -->
     </div>
     <div style="text-align:center;">
       <button class="btn btn-primary" onclick="goToFacilityScreen()">예</button>
-      <br>
       <button class="btn btn-secondary" onclick="goBackToUserInfo()">아니오</button>
     </div>
   </div>
 
   <!-- 시설 선택 화면 -->
-  <div id="facility-screen" class="screen" style="padding-top: 50px;">
+  <div id="facility-screen" class="screen">
     <h2 style="margin-bottom:30px; text-align:center; color:#333;">🎯 시설 선택</h2>
     <div class="facilities-grid">
       <div class="facility-card" onclick="selectFacility(this)">
@@ -88,7 +88,7 @@
       </div>
       <div class="facility-card" onclick="selectFacility(this)">
         <span class="facility-emoji">🎤</span>
-        <div class="facility-name">노래방 </div>
+        <div class="facility-name">노래방</div>
       </div>
       <div class="facility-card" onclick="selectFacility(this)">
         <span class="facility-emoji">🎲</span>
@@ -103,42 +103,42 @@
         <div class="facility-name">강의실</div>
       </div>
     </div>
-    <div style="text-align: center; margin-top: 80px;">
+    <div style="text-align: center; margin-top: 40px;">
     <button class="btn btn-primary" onclionclick="showScreen('facility-number-screen')">다음</button>
   </div>
  </div>
   
    <!-- 시설 번호 선택 화면 -->
-  <div id="facility-number-screen" class="screen" style="padding-top: 50px;">
+  <div id="facility-number-screen" class="screen">
     <h2 style="margin-bottom:30px; text-align:center; color:#333;">🎯 이용 공간 선택</h2>
     <div class="number-grid">
       </div>
     <div style="text-align: center; margin-top: 40px;">
-         <button class="btn btn-primary" onclick="showScreen('datetime-screen')">다음</button>
+         <button class="btn btn-primary" onclick="proceedAfterFacilityNumber()">예약완료</button>
     </div>
   </div>
 
-  <!-- 날짜/시간 선택 화면 -->
-  <div id="datetime-screen" class=" screen"style="padding-top: 50px;">
-    <h2 style="margin-bottom:30px; text-align:center; color:#333;">📅 날짜 및 시간 선택</h2>
-    <div class="today-date" id="today-date" style="max-width: 350px; margin: 0 auto; text-align: center; font-size: 1.3em;"></div>
+  <!-- 시간 선택 화면 -->
+  <div id="datetime-screen" class="screen">
+    <h2 style="margin-bottom:30px; text-align:center; color:#333;">⏰ 시간 선택</h2>
+    <div class="today-date" id="today-date"></div>
     <div class="form-group">
-      <label style="display: block; font-size: 1.4em; margin: 30px 0 20px; text-align: center;">⏰ 시간 선택</label>
+      <label>⏰ 시간 선택!</label>
       <div class="time-slots">
-  <div class="time-slot" onclick="selectTimeSlot(this)" data-time="13:00~13:30">13:00~13:30</div>
-  <div class="time-slot" onclick="selectTimeSlot(this)" data-time="13:30~14:00">13:30~14:00</div>
-  <div class="time-slot" onclick="selectTimeSlot(this)" data-time="14:00~14:30">14:00~14:30</div>
-  <div class="time-slot" onclick="selectTimeSlot(this)" data-time="14:30~15:00">14:30~15:00</div>
-  <div class="time-slot" onclick="selectTimeSlot(this)" data-time="15:00~15:30">15:00~15:30</div>
-  <div class="time-slot" onclick="selectTimeSlot(this)" data-time="15:30~16:00">15:30~16:00</div>
-  <div class="time-slot" onclick="selectTimeSlot(this)" data-time="16:00~16:30">16:00~16:30</div>
-  <div class="time-slot" onclick="selectTimeSlot(this)" data-time="16:30~17:00">16:30~17:00</div>
-  <div class="time-slot" onclick="selectTimeSlot(this)" data-time="17:00~17:30">17:00~17:30</div>
-  <div class="time-slot" onclick="selectTimeSlot(this)" data-time="17:30~18:00">17:30~18:00</div>
-</div>
+        <div class="time-slot" onclick="selectTimeSlot(this)" data-time="09:00~10:00">09:00-10:00</div>
+        <div class="time-slot" onclick="selectTimeSlot(this)" data-time="10:00~11:00">10:00-11:00</div>
+        <div class="time-slot" onclick="selectTimeSlot(this)" data-time="11:00~12:00">11:00-12:00</div>
+        <div class="time-slot" onclick="selectTimeSlot(this)" data-time="13:00~14:00">13:00-14:00</div>
+        <div class="time-slot" onclick="selectTimeSlot(this)" data-time="14:00~15:00">14:00-15:00</div>
+        <div class="time-slot" onclick="selectTimeSlot(this)" data-time="15:00~16:00">15:00-16:00</div>
+        <div class="time-slot" onclick="selectTimeSlot(this)" data-time="16:00~17:00">16:00-17:00</div>
+        <div class="time-slot" onclick="selectTimeSlot(this)" data-time="17:00~18:00">17:00-18:00</div>
+        <div class="time-slot" onclick="selectTimeSlot(this)" data-time="18:00~19:00">18:00-19:00</div>
+        <div class="time-slot" onclick="selectTimeSlot(this)" data-time="19:00~20:00">19:00-20:00</div>
+      </div>
     </div>
-    <div style="text-align: center; margin-top: 60px;">
-    <button class="btn btn-primary" onclick="completeReservation()">예약완료</button>
+    <div style="text-align: center; margin-top: 40px;">
+    <button class="btn btn-primary" onclick="proceedAfterDateTime()">다음</button>
   </div>
  </div>
 
@@ -162,7 +162,7 @@
       <input type="tel" id="search-phone" class="form-input" placeholder="010-0000-0000" style="margin: 0 auto; display: block;">
     </div>
     <div style="text-align: center; margin-top: 25px;">
-      <button class="btn btn-primary" onclick="searchReservations()" style="margin-right: 10px;">🔍 검색</button>
+      <button class="btn btn-primary" onclick="searchReservationsFirebase()" style="margin-right: 10px;">🔍 검색</button>
       <br>
       <button class="btn btn-secondary" onclick="clearSearch()" style="margin-right: 10px;">🔄 초기화</button>
     </div>
@@ -185,7 +185,7 @@
 </div>
 
   <!-- 시설별 예약 현황 화면 -->
-<div id="all-status-screen" class="screen" style="padding-top: 30px;">
+<div id="all-status-screen" class="screen">
   
   <!-- 시설 선택 섹션 -->
   <div id="status-facility-select-section" class="status-section active">
@@ -211,7 +211,7 @@
       </div>
       <div class="facility-card" onclick="selectStatusFacility(this)">
         <div class="facility-icon">🎤</div>
-        <div class="facility-name">노래방ㅣ오픈준비⏳</div>
+        <div class="facility-name">노래방</div>
         <div class="facility-desc">1~2번 방</div>
       </div>
         <div class="facility-card" onclick="selectStatusFacility(this)">
@@ -232,7 +232,7 @@
     </div>
     
     <!-- 전체 보기 버튼 -->
-    <div style="text-align:center; margin-top:10px;">
+    <div style="text-align:center; margin-top:30px;">
       <button class="btn btn-primary" onclick="showAllFacilitiesStatus()" style="max-width:200px;">
         📊 전체 시설 현황 보기
       </button>
@@ -261,11 +261,11 @@
     
     <!-- 범례 -->
     <div style="margin-top:20px; padding:15px; background:#f8f9fa; border-radius:10px;">
-      <h4 style="margin:0 0 10px 0; color:#333; font-size: 1.3em; font-weight: bold;">✅ 예약했어요 ✅</h4>
+      <h4 style="margin:0 0 10px 0; color:#333;">✅ 예약했어요 ✅</h4>
       <div style="display:flex; gap:20px; flex-wrap:wrap;">
         <div style="display:flex; align-items:center; gap:8px;">
           <div style="width:20px; height:20px; border:2px solid #ff8c00; border-radius:4px; background:#ff8c00;"></div>
-          <span style="font-size: 1.2em;" font-weight:bold;">예약됨</span>
+          <span style="font-size:1em;" font-weight:bold;">예약됨</span>
         </div>
       </div>
     </div>
@@ -275,15 +275,13 @@
   <!-- 예약 완료 화면 -->
   <div id="success-screen" class="screen">
     <div class="welcome-screen">
-     <div class="welcome-emoji success-emoji" style="font-size: 40px;">✅</div>
+     <div class="welcome-emoji success-emoji">✅</div>
       <div class="welcome-text">예약이 완료되었습니다!</div>
       <div style="background:#f8f9fa; padding:20px; border-radius:15px; margin-bottom:30px; text-align:left;">>
       </div>
-      <button class="btn btn-primary" onclick="showScreen('main-screen')" style="margin-top: 200px;">메인으로 돌아가기</button>
+      <button class="btn btn-primary" onclick="showScreen('main-screen')">메인으로 돌아가기</button>
     </div>
   </div>
-<!-- partial -->
-  <script  src="./script.js"></script>
 
   <!-- 관리자 비밀번호 입력 모달 -->
 <div id="admin-modal" style="display:none; position:fixed; bottom:20px; right:20px; background:white; padding:20px; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.2); z-index:999;">
@@ -330,7 +328,7 @@
 <script src="firebase-config.js"></script>
 
 <!-- 예약 기능 로직 -->
-<script src="app.js"></script>
+<script src="script.js"></script>
 
 <script>
   if ('serviceWorker' in navigator) {
